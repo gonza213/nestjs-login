@@ -13,7 +13,7 @@ import { AuthModule } from './auth/auth.module';
       sortSchema: true,
     }),
     UsersModule,
-    // AuthModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
