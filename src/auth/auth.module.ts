@@ -4,9 +4,17 @@ import { AuthResolver } from './auth.resolver';
 import { LocalStrategy } from './local.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { UsersModule } from '../users/users.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [PassportModule, UsersModule],
-  providers: [AuthService, AuthResolver, LocalStrategy]
+  imports: [
+    PassportModule,
+    UsersModule,
+    JwtModule.register({ 
+      signOptions: { expiresIn: '1h' }, 
+      secret: '91!g45Y' //process.env.SECRET
+    }),
+  ],
+  providers: [AuthService, AuthResolver, LocalStrategy],
 })
 export class AuthModule {}
