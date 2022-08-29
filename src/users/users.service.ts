@@ -1,38 +1,37 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
 import { CreateUserInput } from './dto/create-user.input';
+import { Usuario } from './users.model';
 
 @Injectable()
 export class UsersService {
-  private readonly users = [
-    {
-      id: 1,
-      username: 'wolf',
-      password: 'wolf123',
-    },
-    {
-      id: 2,
-      username: 'bobby',
-      password: 'bobby123',
-    },
-  ];
-  create(createUserInput: CreateUserInput) {
+  constructor(
+    @InjectModel(Usuario)
+    private userModel: typeof Usuario,
+  ) {}
+
+  async create(createUserInput: CreateUserInput) {
     const user = {
       ...createUserInput,
-      id: this.users.length + 1,
+      id: (await this.userModel.count()) + 1,
     };
 
-    this.users.push(user);
-
-    console.log(this.users);
-
-    return user;
+    try {
+      await this.userModel.create(user);
+      return user;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  findAll() {
-    return this.users;
+  async findAll(): Promise<Usuario[]> {
+    return this.userModel.findAll();
   }
 
-  findOne(username: string) {
-    return this.users.find((user) => user.username === username);
+  findOne(username: string): Promise<Usuario> {
+    return this.userModel.findOne({
+      where: { username },
+      raw: true
+    });
   }
 }
