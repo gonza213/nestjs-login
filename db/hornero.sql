@@ -7,5 +7,5 @@ CREATE TABLE usuarios (
     nombre VARCHAR(255),
     password VARCHAR(255),
     createdAt TIMESTAMP NULL,
-    updateAt TIMESTAMP NULL,
+    updatedAt TIMESTAMP NULL,
 );
